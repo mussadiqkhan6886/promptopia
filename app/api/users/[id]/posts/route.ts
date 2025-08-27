@@ -3,11 +3,11 @@ import Prompt from "@models/prompt";
 
 export const GET = async (
   request: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }>}
 ) => {
   try {
     await connectToDB();
-    const { id } = await params;
+    const { id } = await context.params;
 
     const prompts = await Prompt.find({
       creator: id,

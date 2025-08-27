@@ -6,22 +6,24 @@ import Profile from "@components/Profile";
 import { Post } from "@types";
 
 
-const MyProfile = ({params}: {params: {id: number}}) => {
+const MyProfile = (context: { params: Promise<{ id: string }>}) => {
 
     const [posts, setPosts] = useState<Post[]>([])
     const searchParam = useSearchParams()
     const username = searchParam.get("name")
+    const id = null
 
     useEffect(() => {
         const fetchPosts = async () => {
-        const response = await fetch(`/api/users/${params?.id}/posts`)
+        const {id} = await context.params
+        const response = await fetch(`/api/users/${id}/posts`)
         const data = await response.json();
-
+            
         setPosts(data) 
         }
 
-        if(params?.id) fetchPosts()
-    }, [params.id])
+        if(id) fetchPosts()
+    }, [id])
 
   return (
     <Profile 
