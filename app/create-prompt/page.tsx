@@ -1,32 +1,21 @@
 'use client'
 
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, FormEvent, SetStateAction, useState } from "react"
 import {useSession} from "next-auth/react"
 import { useRouter } from "next/navigation"
 import Form from "@components/Form"
 
-interface Post {
-    post: {
-        prompt: string
-        tag: string
-    }
-    setPost: Dispatch<SetStateAction<{
-        prompt: string;
-        tag: string
-    }>>
-}
-
 const CreatePrompt = () => {
 
     const [submitting, setSubmitting] = useState<boolean>(false)
-    const [post, setPost] = useState<Post>({
+    const [post, setPost] = useState<{prompt: string, tag: string}>({
         prompt: "",
         tag: ""
     }) 
     const router = useRouter()
     const {data: session} = useSession()
 
-    const createPrompt = async (e) => {
+    const createPrompt = async (e: FormEvent) => {
         e.preventDefault()
         setSubmitting(true)
 
