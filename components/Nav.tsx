@@ -6,7 +6,6 @@ import { useState, useEffect } from "react"
 import { signIn, signOut, useSession, getProviders, LiteralUnion, ClientSafeProvider } from "next-auth/react" 
 import { BuiltInProviderType } from "@node_modules/next-auth/providers";
 import Provider from "./Provider";
-import { useRouter } from "next/navigation";
 
 const Nav = () => {
 
@@ -14,7 +13,6 @@ const Nav = () => {
 
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
-  const Router = useRouter()
 
   useEffect(() => {
     const setProvidersFunc = async () => {
@@ -46,7 +44,7 @@ const Nav = () => {
             <button type="button" onClick={handleSignOut} className="outline_btn">Sign Out</button>
 
             <Link href={"/profile"}>
-              <Image src={session?.user.image!} width={37} height={37} className="rounded-full " alt="profile image" />
+              <Image src={session?.user?.image ?? "/assets/images/default-avatar.png"} width={37} height={37} className="rounded-full " alt="profile image" />
             </Link>
           </div>
         ): (
@@ -67,7 +65,7 @@ const Nav = () => {
       <div className="sm:hidden flex relative">
         {session?.user ? (
           <div className="flex">
-            <Image src={session?.user.image!} width={37} height={37} className="rounded-full" alt="profile" onClick={() => setToggleDropdown((prev) => !prev)} />
+            <Image src={session?.user?.image ?? "/assets/images/default-avatar.png"} width={37} height={37} className="rounded-full" alt="profile" onClick={() => setToggleDropdown((prev) => !prev)} />
 
             {toggleDropdown && (
               <div className="dropdown">
