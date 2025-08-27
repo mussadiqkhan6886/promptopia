@@ -6,6 +6,7 @@ import { useState, useEffect } from "react"
 import { signIn, signOut, useSession, getProviders, LiteralUnion, ClientSafeProvider } from "next-auth/react" 
 import { BuiltInProviderType } from "@node_modules/next-auth/providers";
 import Provider from "./Provider";
+import { useRouter } from "next/navigation";
 
 const Nav = () => {
 
@@ -13,6 +14,7 @@ const Nav = () => {
 
   const [providers, setProviders] = useState<Record<LiteralUnion<BuiltInProviderType, string>, ClientSafeProvider> | null>(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
+  const Router = useRouter()
 
   useEffect(() => {
     const setProvidersFunc = async () => {
@@ -23,6 +25,10 @@ const Nav = () => {
 
     setProvidersFunc()
   }, [])
+
+  const handleSignOut = () => {
+    signOut({callbackUrl: "/"})
+  }
 
   return (
     <nav className="flex-between w-full mb-16 pt-3">
@@ -37,7 +43,7 @@ const Nav = () => {
               Create Post
             </Link>
 
-            <button type="button" onClick={() => signOut} className="outline_btn">Sign Out</button>
+            <button type="button" onClick={handleSignOut} className="outline_btn">Sign Out</button>
 
             <Link href={"/profile"}>
               <Image src={session?.user.image!} width={37} height={37} className="rounded-full " alt="profile image" />
@@ -46,7 +52,11 @@ const Nav = () => {
         ): (
           <>
             {providers && Object.values(providers).map(provider => (
-              <button type="button" key={Provider.name} onClick={() => signIn(provider.id)} className="black_btn">
+              <button type="button" key={provider.name} onClick={() => signIn(provider.id, {
+                prompt: "select_account",
+                redirect: true,
+                callbackUrl: "/"
+              })} className="black_btn">
                 Sign In
               </button>
             ))}
@@ -79,7 +89,11 @@ const Nav = () => {
         ): (
           <>
             {providers && Object.values(providers).map(provider => (
-              <button type="button" key={Provider.name} onClick={() => signIn(provider.id)} className="black_btn">
+              <button type="button" key={Provider.name} onClick={() => signIn(provider.id, {
+                prompt: "select_account",
+                redirect: true,
+                callbackUrl: "/"
+              })}  className="black_btn">
                 Sign In
               </button>
             ))}

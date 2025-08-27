@@ -20,30 +20,37 @@ const handler = NextAuth({
 
         return session
     },
-    async signIn({ profile }: {profile?: any}) {
-      try {
-        await connectToDB();
+    async signIn({ profile }: { profile?: any }) {
+  try {
+    await connectToDB();
 
-        if(profile) {
-            const userExists = await User.findOne({
-                email: profile.email
-            })
+    if (!profile?.email) {
+      console.log("❌ Google profile missing email");
+      return false; // cannot continue
+    }
 
-            if(!userExists){
-                await User.create({
-                    email: profile.email,
-                    username: profile.name!.replace(" ", "").toLowerCase(),
-                    image: profile.picture!
-                })
-            }
-        }
+    const userExists = await User.findOne({ email: profile.email });
 
-        return true; 
-      } catch (err) {
-        console.log("Error in signIn callback", err);
-        return false;
-      }
-    },
+    if (!userExists) {
+      const username =
+        profile?.name?.replace(/\s+/g, "").toLowerCase() ||
+        profile?.email?.split("@")[0]; // fallback to email prefix
+
+      await User.create({
+        email: profile.email,
+        username,
+        image: profile?.picture || "",
+      });
+    }
+
+    return true; // ✅ login succeeds
+  } catch (err) {
+    console.error("🔥 Error in signIn callback", err);
+    return false; // triggers AccessDenied if DB errors
+  }
+}
+
+
   },
 })
 

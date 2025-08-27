@@ -6,7 +6,7 @@ export interface IUser {
   image?: string;
 }
 
-const UserSchema = new Schema<IUser>({
+const UserSchema = new Schema({
   email: {
     type: String,
     unique: [true, "Email already exists!"],
@@ -15,12 +15,13 @@ const UserSchema = new Schema<IUser>({
   username: {
     type: String,
     required: [true, "Username is required!"],
-    match: [/^[a-zA-Z0-9_]+$/, "Username is invalid"], // ✅ RegExp, not string
+    match: [/^[a-zA-Z0-9]+$/, "Username is invalid"], // ✅ RegExp, not string
   },
   image: {
     type: String,
   },
 });
+
 
 // Avoid model overwrite errors in Next.js hot-reloading
 const User = models.User || model<IUser>("User", UserSchema);

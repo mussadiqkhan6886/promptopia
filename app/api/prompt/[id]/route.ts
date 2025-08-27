@@ -1,52 +1,73 @@
 import { connectToDB } from "@utils/database";
 import Prompt from "@models/prompt";
+import { NextRequest } from "@node_modules/next/server";
 
-export const GET = async (req, {params}) => {
-    try{
-        await connectToDB()
-        const prompts = await Prompt.findById(params.id).populate('creator')
-
-        if(!prompt) return new Response("Prompt not found", {status: 404})
-
-        return new Response(JSON.stringify(prompts), {status: 200})
-    }catch(err){
-        return new Response("Failed to fetch data from server", {status: 500})
-    }
+interface RouteParams {
+  params: {
+    id: string;
+  };
 }
 
+export const GET = async (
+  req: NextRequest,
+  { params }: RouteParams
+): Promise<Response> => {
+  try {
+    await connectToDB();
 
-export const PATCH = async (req, {params}) => {
-    const {prompt, tag} = req.json()
+    const { id } = await params
 
-    try{
-        await connectToDB()
+    const prompt = await Prompt.findById(id).populate("creator");
 
-        const existingPrompt = await Prompt.findById(params.id)
-
-        if(!existingPrompt) return new Response("Prompt Not Found", { status: 404 })
-            
-        existingPrompt.prompt = prompt
-        existingPrompt.tag = tag
-
-        await existingPrompt.save()
-
-        return new Response(JSON.stringify(existingPrompt), {status: 200})
-
-    }catch(err){
-        return new Response("Error", {status: 500})
+    if (!prompt) {
+      return new Response("Prompt not found", { status: 404 });
     }
-}
 
-export const DELETE = async (req, {param}) => {
-    try{
-        await connectToDB()
+    return new Response(JSON.stringify(prompt), { status: 200 });
+  } catch (err) {
+    return new Response("Failed to fetch data from server", { status: 500 });
+  }
+};
 
-        await Prompt.findByIdAndDelete(param.id)
+export const PATCH = async (req: NextRequest,
+  { params }: RouteParams
+): Promise<Response> => {
+  try {
+    const { prompt, tag } = await req.json();
 
-        return new Response("Prompt deleted successfully", {status: 200})
+    await connectToDB();
 
-    }catch(err){
-        return new Response("Error Deleting Prompt", {status: 500})
+    const { id } = await params 
+
+    const existingPrompt = await Prompt.findById(id);
+
+    if (!existingPrompt) {
+      return new Response("Prompt Not Found", { status: 404 });
     }
-}
 
+    existingPrompt.prompt = prompt;
+    existingPrompt.tag = tag;
+
+    await existingPrompt.save();
+
+    return new Response(JSON.stringify(existingPrompt), { status: 200 });
+  } catch (err) {
+    return new Response("Error updating prompt", { status: 500 });
+  }
+};
+
+export const DELETE = async (req: NextRequest,
+  { params }: RouteParams
+): Promise<Response> => {
+  try {
+    await connectToDB();
+
+    const { id } = await params
+
+    await Prompt.findByIdAndDelete(id);
+
+    return new Response("Prompt deleted successfully", { status: 200 });
+  } catch (err) {
+    return new Response("Error Deleting Prompt", { status: 500 });
+  }
+};

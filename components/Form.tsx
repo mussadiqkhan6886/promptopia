@@ -40,7 +40,7 @@ const Form = ({type, post, setPost, submitting, handleSubmit}: Props) => {
             <span className='font-normal'>(#product, #webdevelopment, #idea)</span>
           </span>
 
-          <input value={post.tag} onChange={e => setPost({...post, tag: e.target.value})} placeholder='#tag' required className='input ' />
+          <input value={post.tag} onChange={e => setPost({...post, tag: e.target.value})} placeholder='#tag' required className='form_input' />
         </label>
         
         <div className="flex-end mx-3 mb-5 gap-4">
