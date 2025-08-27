@@ -2,10 +2,7 @@ import { connectToDB } from "@utils/database";
 import Prompt from "@models/prompt";
 import { NextRequest } from "next/server";
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-): Promise<Response> => {
+export const GET = async ({ params }: { params: { id: string } }): Promise<Response> => {
   try {
     await connectToDB();
 

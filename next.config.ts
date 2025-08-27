@@ -1,19 +1,20 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  experimental: {
-    appDir: true,
-    serverComponentsExternalPackages: ["mongoose"],
-  },
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  // Define the option at the root level—not inside `experimental`
+  serverExternalPackages: ["mongoose"],
+
   images: {
-    domains: ['lh3.googleusercontent.com'],
+    domains: ["lh3.googleusercontent.com"],
   },
-  webpack(config) {
+
+  webpack: (config) => {
     config.experiments = {
       ...config.experiments,
       topLevelAwait: true,
-    }
-    return config
-  }
-}
+    };
+    return config;
+  },
+};
 
-module.exports = nextConfig
+export default nextConfig;
