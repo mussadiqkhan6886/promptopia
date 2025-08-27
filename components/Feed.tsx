@@ -2,15 +2,12 @@
 
 import { useState, useEffect } from "react";
 import PromptCard from "./PromptCard";
+import { Post } from "@types";
 
-interface Post{
-  _id: number | string
-  post: string[]
-}
 
 interface Props {
-  data: any
-  handleTagClick: () => void
+  data: Post[];
+  handleTagClick: (tag: string) => void;
 }
 
 const PromptCardList = ({data, handleTagClick}: Props) => {

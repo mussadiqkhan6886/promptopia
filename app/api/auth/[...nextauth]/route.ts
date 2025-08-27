@@ -20,7 +20,7 @@ const handler = NextAuth({
 
         return session
     },
-    async signIn({ profile }) {
+    async signIn({ profile }: {profile?: any}) {
       try {
         await connectToDB();
 
@@ -40,7 +40,7 @@ const handler = NextAuth({
 
         return true; 
       } catch (err) {
-        console.error("Error in signIn callback", err);
+        console.log("Error in signIn callback", err);
         return false;
       }
     },

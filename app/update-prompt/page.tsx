@@ -1,27 +1,19 @@
 'use client'
 
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Form from "@components/Form"
 
-interface Post {
-    post: {
-        prompt: string
-        tag: string
-    }
-    setPost: Dispatch<SetStateAction<{
-        prompt: string;
-        tag: string
-    }>>
-}
+
 
 const EditPrompt = () => {
 
     const [submitting, setSubmitting] = useState<boolean>(false)
-    const [post, setPost] = useState<Post>({
+    const [post, setPost] = useState<{ prompt: string; tag: string }>({
         prompt: "",
         tag: ""
-    }) 
+    });
+
     const router = useRouter()
     const searchParams = useSearchParams()
     const promptId = searchParams.get("id")
@@ -40,7 +32,7 @@ const EditPrompt = () => {
         if(promptId) getPromptDetails()
     }, [promptId])
 
-    const updatePrompt = async (e) => {
+    const updatePrompt = async (e: React.FormEvent) => {
         e.preventDefault()
         setSubmitting(true)
 

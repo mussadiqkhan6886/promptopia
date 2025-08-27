@@ -12,7 +12,7 @@ interface Props {
     tag: string
   }>>
   submitting: boolean
-  handleSubmit: (e: any) => Promise<void>
+  handleSubmit: (e: React.FormEvent) => Promise<void>
 }
 
 const Form = ({type, post, setPost, submitting, handleSubmit}: Props) => {

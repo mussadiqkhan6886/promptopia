@@ -4,12 +4,16 @@ import { useState } from 'react'
 import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from 'next/navigation'
+import { Post } from '@types';
 
 interface Props {
-  
+  post: Post;
+  handleTagClick?: (tag: string) => void;
+  handleEdit?: () => void;
+  handleDelete?: () => void;
 }
 
-const PromptCard = ({post, handleTagClick, handleEdit, handleDelete}) => {
+const PromptCard = ({post, handleTagClick, handleEdit, handleDelete}: Props) => {
 
   const [copied, setCopied] = useState("")
   const {data: session} = useSession()
