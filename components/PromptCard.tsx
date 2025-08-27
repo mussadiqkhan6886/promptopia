@@ -39,7 +39,7 @@ const PromptCard = ({post, handleTagClick, handleEdit, handleDelete}: Props) => 
         </div>
 
         <div className="copy_btn" onClick={handleCopy}>
-          <Image src={copied === post.prompt ? "/assets/icons/tick/svg" : "/assets/icons/copy.svg"} alt='copy icon' width={12} height={12} />
+          <Image src={copied === post.prompt ? "/assets/icons/tick.svg" : "/assets/icons/copy.svg"} alt='copy icon' width={12} height={12} />
         </div>
       </div>
 
