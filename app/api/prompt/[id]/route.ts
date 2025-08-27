@@ -2,7 +2,11 @@ import { connectToDB } from "@utils/database";
 import Prompt from "@models/prompt";
 import { NextRequest } from "next/server";
 
-export const GET = async ({ params }: { params: { id: string } }): Promise<Response> => {
+// GET /api/prompt/[id]
+export const GET = async (
+  request: Request,
+  { params }: { params: { id: string } }
+) =>  {
   try {
     await connectToDB();
 
@@ -14,16 +18,17 @@ export const GET = async ({ params }: { params: { id: string } }): Promise<Respo
 
     return new Response(JSON.stringify(prompt), { status: 200 });
   } catch (err) {
-    return new Response("Failed to fetch data from server" + err, { status: 500 });
+    return new Response("Failed to fetch data from server: " + err, { status: 500 });
   }
 };
 
+// PATCH /api/prompt/[id]
 export const PATCH = async (
-  req: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
-): Promise<Response> => {
+) =>  {
   try {
-    const { prompt, tag } = await req.json();
+    const { prompt, tag } = await request.json();
 
     await connectToDB();
 
@@ -40,14 +45,15 @@ export const PATCH = async (
 
     return new Response(JSON.stringify(existingPrompt), { status: 200 });
   } catch (err) {
-    return new Response("Error updating prompt" + err, { status: 500 });
+    return new Response("Error updating prompt: " + err, { status: 500 });
   }
 };
 
+// DELETE /api/prompt/[id]
 export const DELETE = async (
-  req: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
-): Promise<Response> => {
+) =>  {
   try {
     await connectToDB();
 
@@ -55,6 +61,6 @@ export const DELETE = async (
 
     return new Response("Prompt deleted successfully", { status: 200 });
   } catch (err) {
-    return new Response("Error Deleting Prompt" + err, { status: 500 });
+    return new Response("Error Deleting Prompt: " + err, { status: 500 });
   }
 };
