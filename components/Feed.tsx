@@ -45,7 +45,7 @@ const Feed = () => {
       (post) => 
         regex.test(post.prompt) ||
       regex.test(post.tag) || 
-      regex.test(post.creator.username)
+      regex.test(post.creator?.username)
     )
   }
   
